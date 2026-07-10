@@ -5,22 +5,14 @@ from rest_framework.decorators import api_view
 from products.serializers import ProductSerializer
 
 
-@api_view(["GET"])
+@api_view(["POST"])
 def api_home(request, *args, **kwargs):
     """
     DRF API View
     """
-    instance = Product.objects.all().order_by("?").first()
-    data = {}
-    if instance:
-        # data = model_to_dict(
-        #     instance,
-        #     fields=[
-        #         "id",
-        #         "title",
-        #         "price",
-        #         "sale_price",
-        #     ],
-        # )
-        data = ProductSerializer(instance).data
-    return Response(data)
+    serialiser = ProductSerializer(data=request.data)
+    if serialiser.is_valid(raise_exception=True):
+        # instance = serialiser.save()
+        # instance = form.save() # Django Form
+        print(serialiser.data)
+        return Response(serialiser.data)
