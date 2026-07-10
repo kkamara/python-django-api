@@ -3,7 +3,7 @@ from .models import Product
 from .serializers import ProductSerializer
 
 
-class ProductCreateAPIView(generics.CreateAPIView):
+class ProductListCreateAPIView(generics.ListCreateAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
 
@@ -22,3 +22,12 @@ class ProductDetailAPIView(generics.RetrieveAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     # lookup_field = "pk" # The default
+
+
+class ProductListAPIView(generics.ListAPIView):
+    """
+    Not gonna use this method.
+    """
+
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
