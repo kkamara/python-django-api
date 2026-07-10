@@ -10,8 +10,6 @@ This repository follows CodingEntrepreneurs's course Build a Django REST API wit
 
 * [Django Shell](#django-shell)
 
-* [Cache View Templates](#cache-view-templates)
-
 ## Requirements
 
 * [Tested using Python 3.13](https://www.python.org)
@@ -40,10 +38,4 @@ python manage.py runserver
 
 ```bash
 python manage.py shell
-```
-
-## Cache View Templates
-
-```bash
-python manage.py collectstatic
 ```
