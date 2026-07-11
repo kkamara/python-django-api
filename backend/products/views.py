@@ -1,15 +1,17 @@
-from rest_framework import generics, mixins
+from rest_framework import generics, mixins, permissions, authentication
 from .models import Product
 from .serializers import ProductSerializer
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
-from django.http import Http404
+# from django.http import Http404
 
 
 class ProductListCreateAPIView(generics.ListCreateAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
+    authentication_classes = [authentication.SessionAuthentication]
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
     def perform_create(self, serializer):
         # serializer.save(user=self.request.user)
@@ -40,12 +42,12 @@ class ProductMixinView(
     mixins.ListModelMixin,
     mixins.RetrieveModelMixin,
     mixins.CreateModelMixin,
-    generics.GenericAPIView
+    generics.GenericAPIView,
 ):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     lookup_field = "pk"
-    
+
     def get(self, request, *args, **kwargs):
         pk = kwargs.get("pk")
         if pk is not None:
@@ -54,7 +56,7 @@ class ProductMixinView(
 
     def post(self, request, *args, **kwargs):
         return self.create(request, *args, **kwargs)
-    
+
     def perform_create(self, serializer):
         content = serializer.validated_data.get("content") or None
         if content is None:
