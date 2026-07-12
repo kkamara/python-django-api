@@ -12,3 +12,6 @@ class Product(models.Model):
 
     def get_discount(self):
         return "123"
+
+    def __str__(self):
+        return self.title
