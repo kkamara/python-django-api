@@ -23,6 +23,7 @@ class ProductListCreateAPIView(StaffEditorPermissionMixin, generics.ListCreateAP
             content = title
         # return super().perform_create(serializer)  # saves
         return serializer.save(content=content)
+        # Send a Django signal
 
 
 class ProductDetailAPIView(StaffEditorPermissionMixin, generics.RetrieveAPIView):
