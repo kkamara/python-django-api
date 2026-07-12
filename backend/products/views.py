@@ -6,27 +6,43 @@ from .serializers import ProductSerializer
 # from rest_framework.response import Response
 # from django.shortcuts import get_object_or_404
 # from django.http import Http404
-from api.mixins import StaffEditorPermissionMixin
+from api.mixins import StaffEditorPermissionMixin, UserQuerySetMixin
 
 
-class ProductListCreateAPIView(StaffEditorPermissionMixin, generics.ListCreateAPIView):
+class ProductListCreateAPIView(
+    UserQuerySetMixin, StaffEditorPermissionMixin, generics.ListCreateAPIView
+):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
+    # allow_staff_view = True
 
     def perform_create(self, serializer):
         # serializer.save(user=self.request.user)
-        email = serializer.validated_data.pop("email")
-        print(email)
+        # email = serializer.validated_data.pop("email")
+        # print(email)
         title = serializer.validated_data.get("title")
         content = serializer.validated_data.get("content") or None
         if content is None:
             content = title
         # return super().perform_create(serializer)  # saves
-        return serializer.save(content=content)
+        return serializer.save(user=self.request.user, content=content)
         # Send a Django signal
 
+    # This is now done in UserQuerySetMixin which
+    # this class inherits from.
+    # def get_queryset(self):
+    #     qs = super().get_queryset()
+    #     request = self.request
+    #     user = request.user
+    #     if not user.is_authenticated:
+    #         return Product.objects.none()
+    #     # print(request.user)
+    #     return qs.filter(user=user)
 
-class ProductDetailAPIView(StaffEditorPermissionMixin, generics.RetrieveAPIView):
+
+class ProductDetailAPIView(
+    UserQuerySetMixin, StaffEditorPermissionMixin, generics.RetrieveAPIView
+):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     # lookup_field = "pk" # The default
@@ -98,7 +114,9 @@ class ProductDetailAPIView(StaffEditorPermissionMixin, generics.RetrieveAPIView)
 #         return Response({"invalid": "not good data"}, status=400)
 
 
-class ProductUpdateAPIView(StaffEditorPermissionMixin, generics.UpdateAPIView):
+class ProductUpdateAPIView(
+    UserQuerySetMixin, StaffEditorPermissionMixin, generics.UpdateAPIView
+):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     lookup_field = "pk"
@@ -110,7 +128,9 @@ class ProductUpdateAPIView(StaffEditorPermissionMixin, generics.UpdateAPIView):
             instance.save()
 
 
-class ProductDeleteAPIView(StaffEditorPermissionMixin, generics.DestroyAPIView):
+class ProductDeleteAPIView(
+    UserQuerySetMixin, StaffEditorPermissionMixin, generics.DestroyAPIView
+):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     lookup_field = "pk"
