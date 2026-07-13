@@ -17,6 +17,8 @@ This repository follows CodingEntrepreneurs's course Build a Django REST API wit
 ## Installation
 
 ```bash
+cp .env.example .env
+
 python -m venv env
 source env/bin/activate
 
