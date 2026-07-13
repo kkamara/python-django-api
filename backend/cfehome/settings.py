@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'api',
     'products',
+    'search',
 ]
 
 MIDDLEWARE = [
@@ -135,5 +136,5 @@ REST_FRAMEWORK = {
         "rest_framework.permissions.IsAuthenticatedOrReadOnly",
     ],
     "DEFAULT_PAGINATION_CLASS": "cfehome.pagination.CustomPagination",
-    "PAGE_SIZE": 1,
+    "PAGE_SIZE": 5,
 }

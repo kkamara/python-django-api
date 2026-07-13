@@ -35,6 +35,7 @@ class ProductSerializer(serializers.ModelSerializer):
             "price",
             "sale_price",
             "owner",
+            "public",
         ]
 
     def get_edit_url(self, obj):
