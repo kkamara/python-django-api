@@ -39,6 +39,14 @@ class Product(models.Model):
     public = models.BooleanField(default=True)
 
     objects = ProductManager()
+    
+    # My note:
+    # This is my own code for products.index because
+    # the latest algoliasearch-django module doesn't
+    # support foreign relationships.
+    @property
+    def username(self):
+        return self.user.username if self.user else None
 
     def is_public(self) -> bool:
         # Could base this off a publish_timestamp field:

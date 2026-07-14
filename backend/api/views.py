@@ -14,5 +14,5 @@ def api_home(request, *args, **kwargs):
     if serialiser.is_valid(raise_exception=True):
         # instance = serialiser.save()
         # instance = form.save() # Django Form
-        print(serialiser.data)
+        # print(serialiser.data)
         return Response(serialiser.data)
