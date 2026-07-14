@@ -7,9 +7,9 @@ from .models import Product
 class ProductIndex(AlgoliaIndex):
     # should_index = "is_public"
     # Index primitive fields only; related model objects are not JSON-serializable.
-    fields = ("title", "content", "price", "username", "public")
+    fields = ("title", "body", "price", "username", "public", "path", "endpoint")
     settings = {
-        "searchableAttributes": ["title", "content"],
+        "searchableAttributes": ["title", "body"],
         "attributesForFaceting": ["username", "public"],
     }
     tags = "get_tags_list"

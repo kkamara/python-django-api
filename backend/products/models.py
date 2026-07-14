@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls import reverse
 
 # from django.contrib.auth import get_user_model
 from django.conf import settings
@@ -39,7 +40,22 @@ class Product(models.Model):
     public = models.BooleanField(default=True)
 
     objects = ProductManager()
-    
+
+    def get_absolute_url(self):
+        return reverse("product_detail", kwargs={"pk": self.pk})
+
+    @property
+    def endpoint(self):
+        return self.get_absolute_url()
+
+    @property
+    def path(self):
+        return f"/products/{self.pk}/"
+
+    @property
+    def body(self):
+        return self.content
+
     # My note:
     # This is my own code for products.index because
     # the latest algoliasearch-django module doesn't
