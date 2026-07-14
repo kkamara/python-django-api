@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 from pathlib import Path
 import environ
 import os
+import datetime
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -49,6 +50,7 @@ INSTALLED_APPS = [
     # Third-party apps
     "rest_framework",
     "rest_framework.authtoken",
+    "rest_framework_simplejwt",
     # Internal apps
     "api",
     "products",
@@ -139,10 +141,11 @@ STATIC_URL = "static/"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 REST_FRAMEWORK = {
-    "DEFAULT_AUTHENTICATION_CLASSES": [
+    "DEFAULT_AUTHENTICATION_CLASSES": [ # Order can matter. Example: two auth classes trying to access a bearer-token.
         "rest_framework.authentication.SessionAuthentication",
         # Declared in api/authentication.py
         "api.authentication.TokenAuthentication",
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
     ],
     "DEFAULT_PERMISSION_CLASSES": [
         "rest_framework.permissions.IsAuthenticatedOrReadOnly",
@@ -155,4 +158,14 @@ ALGOLIA = {
     "APPLICATION_ID": env.str("ALGOLIA_APPLICATION_ID"),
     "API_KEY": env.str("ALGOLIA_API_KEY"),
     "INDEX_PREFIX": "cfe",
+}
+
+SIMPLE_JWT = {
+    "AUTH_HEADERS_TYPES": ("Bearer",),
+    # Tutorial creator's note:
+    # The general idea is that when you have a shorter access
+    # token, that just means that it needs to refresh more
+    # often.
+    "ACCESS_TOKEN_LIFETIME": datetime.timedelta(seconds=30),  # hours=3
+    "REFRESH_TOKEN_LIFETIME": datetime.timedelta(minutes=1),  # days=1
 }
