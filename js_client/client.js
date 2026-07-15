@@ -1,9 +1,13 @@
 const contentContainer = document.getElementById('id-content-container');
 const loginForm = document.getElementById('login-form');
+const searchForm = document.getElementById('search-form');
 const baseEndpoint = "http://localhost:8000/api";
 
 if (loginForm) {
     loginForm.addEventListener('submit', handleLogin);
+}
+if (searchForm) {
+    searchForm.addEventListener('submit', handleSearch);
 }
 
 function handleLogin(event) {
@@ -21,6 +25,46 @@ function handleLogin(event) {
     fetch(loginEndpoint, options)
         .then(res => res.json())
         .then(authData => handleAuthData(authData, getProductList))
+        .catch(err => alert(err));
+}
+
+function handleSearch(event) {
+    event.preventDefault();
+    let formData = new FormData(searchForm);
+    let data = Object.fromEntries(formData);
+    let searchParams = new URLSearchParams(data);    
+    const endpoint = `${baseEndpoint}/search/?${searchParams}`;
+    const headers = {
+        "Content-Type": "application/json",
+    }
+    const authToken = localStorage.getItem("access");
+    if (authToken) {
+        headers.Authorization = `Bearer ${authToken}`;
+    }
+    const options = {
+        method: "GET",
+        headers: headers,
+    };
+    fetch(endpoint, options)
+        .then(res => res.json())
+        .then(data => {
+            const validData = isTokenNotValid(data)
+            if (validData && contentContainer) {
+                contentContainer.innerHTML = ""
+                if (data && data.hits) {
+                    let htmlStr  = ""
+                    for (let result of data.hits) {
+                        htmlStr += "<li>"+ result.title + "</li>"
+                    }
+                    contentContainer.innerHTML = htmlStr
+                    if (0 === data.hits.length) {
+                        contentContainer.innerHTML = "<p>No results found</p>"
+                    }
+                } else {
+                    contentContainer.innerHTML = "<p>No results found</p>"
+                }
+            }
+        })
         .catch(err => alert(err));
 }
 
@@ -71,4 +115,4 @@ function getProductList() {
         .catch(err => alert(err));
 }
 
-getProductList();
+// getProductList();
