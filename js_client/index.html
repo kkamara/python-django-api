@@ -1,5 +1,12 @@
 <!DOCTYPE html>
 <html>
+    <head>
+        <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/instantsearch.css@8.18.0/themes/satellite-min.css" integrity="sha256-W3Il6yFstioLHQJoDDU6iFn68e3hZpPPygHS2cjpHeo="
+            crossorigin="anonymous"
+        />
+    </head>
     <body>
         <form id="login-form" method="POST">
             <input
@@ -18,7 +25,11 @@
             />
         </form>
         
-        <form id="search-form" method="GET">
+        <form
+            style="display:none;"
+            id="search-form"
+            method="GET"
+        >
             <input
                 type="text"
                 name="q"
@@ -32,6 +43,25 @@
     </body>
 
     <div id="id-content-container"></div>
+    
+    <div id="searchbox"></div>
+    <div id="clear-refinements"></div>
+    <div id="usernames-list"></div>
+    <div>
+        <h3>Public</h3>
+        <div id="public-list"></div>
+    </div>
+    <div id="hits"></div>
 
+    <script
+        src="https://cdn.jsdelivr.net/npm/algoliasearch@5.55.2/dist/lite/builds/browser.umd.js"
+        integrity="sha256-lv0Up18USw4x5UzP9OQ3Swr4G06aXz0ACDRQgAZO/Uk="
+        crossorigin="anonymous"
+    ></script>
+    <script
+        src="https://cdn.jsdelivr.net/npm/instantsearch.js@4.105.0/dist/instantsearch.production.min.js"
+        integrity="sha256-HwnmoiDbjIjvx7Ytx+lH4N3c+P9FYgvSVLckJ9Arz7k="
+        crossorigin="anonymous"
+    ></script>
     <script src="./client.js"></script>
 </html>

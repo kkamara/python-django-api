@@ -116,3 +116,52 @@ function getProductList() {
 }
 
 // getProductList();
+
+const { liteClient: algoliasearch } = window["algoliasearch/lite"];
+
+const appID = "ALGOLIA_APPLICATION_ID";
+const apiKey = "ALGOLIA_SEARCH_API_KEY";
+const indexName = "cfe_Product";
+
+const searchClient = algoliasearch(appID, apiKey);
+
+const search = instantsearch({
+  indexName,
+  searchClient,
+});
+
+search.addWidgets([
+  instantsearch.widgets.searchBox({
+    container: "#searchbox",
+  }),
+
+  instantsearch.widgets.clearRefinements({
+    container: "#clear-refinements",
+  }),
+
+  instantsearch.widgets.refinementList({
+    container: "#usernames-list",
+    attribute: "username",
+  }),
+
+  instantsearch.widgets.refinementList({
+    container: "#public-list",
+    attribute: "public",
+  }),
+
+  instantsearch.widgets.hits({
+    container: "#hits",
+    templates: {
+        item: `
+            <div>
+                <div>{{#helpers.highlight}}{ "attribute": "title" }{{/helpers.highlight}}</div>
+                <div>{{#helpers.highlight}}{ "attribute": "body" }{{/helpers.highlight}}</div>
+                <p>{{ username }}</p>
+                <p>&#163;{{ price }}</p>
+            </div>
+        `,
+    },
+  }),
+]);
+
+search.start();
