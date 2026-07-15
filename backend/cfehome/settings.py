@@ -47,7 +47,8 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     # Third-party API services
     "algoliasearch_django",
-    # Third-party apps
+    # Third-party modules
+    "corsheaders",
     "rest_framework",
     "rest_framework.authtoken",
     "rest_framework_simplejwt",
@@ -61,6 +62,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -69,6 +71,10 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = "cfehome.urls"
+
+CORS_URLS_REGEX = r"^/api/.*$"
+
+CORS_ALLOWED_ORIGINS = ["http://localhost:8111", "http://127.0.0.1:8111"]
 
 TEMPLATES = [
     {
@@ -141,7 +147,7 @@ STATIC_URL = "static/"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 REST_FRAMEWORK = {
-    "DEFAULT_AUTHENTICATION_CLASSES": [ # Order can matter. Example: two auth classes trying to access a bearer-token.
+    "DEFAULT_AUTHENTICATION_CLASSES": [  # Order can matter. Example: two auth classes trying to access a bearer-token.
         "rest_framework.authentication.SessionAuthentication",
         # Declared in api/authentication.py
         "api.authentication.TokenAuthentication",
